@@ -1,7 +1,7 @@
 import * as React from "react";
 import { useMutation } from "@tanstack/react-query";
 
-export default function useCreditCard(delay: number) {
+export default function useCreditCard(delay: number = 100) {
   const [pending, setPending] = React.useState(false);
   const [validCardNumber, setValidCardNumber] = React.useState(true);
   const [cardNumber, setCardNumber] = React.useState("");
@@ -20,6 +20,8 @@ export default function useCreditCard(delay: number) {
   });
 
   React.useEffect(() => {
+    if (!cardNumber) return;
+
     setPending(true);
     const handler = setTimeout(() => {
       mutate(cardNumber);

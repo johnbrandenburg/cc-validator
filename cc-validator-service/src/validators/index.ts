@@ -1,1 +1,1 @@
-export {default as luhn} from './luhn'
+export { default as luhn } from "./luhn";

@@ -1,7 +1,7 @@
 export default {
-  Base: '/api',
+  Base: "/api",
   CreditCards: {
-    Base: '/credit_cards',
-    Create: '/'
+    Base: "/credit_cards",
+    Create: "/",
   },
 } as const;

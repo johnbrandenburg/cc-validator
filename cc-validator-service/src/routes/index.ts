@@ -1,6 +1,6 @@
-import { Router } from 'express';
-import Paths from '../common/Paths';
-import CreditCardRoutes from './CreditCardRoutes';
+import { Router } from "express";
+import Paths from "../common/Paths";
+import CreditCardRoutes from "./CreditCardRoutes";
 
 const apiRouter = Router();
 

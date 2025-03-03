@@ -10,7 +10,7 @@
     "baseUrl": "./",
     "paths": {
       "@components": ["src/components/index.ts"],
-      "@hooks": ["src/hooks/index.ts"],
+      "@hooks": ["src/hooks/index.ts"]
     }
   }
 }
