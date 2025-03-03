@@ -7,24 +7,21 @@ import {
   fireEvent,
   cleanup,
 } from "@testing-library/react";
-import { http, HttpResponse } from "msw";
+import { server } from "../mocks/node";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import HomeComponent from ".";
 
-type CreditCardsRequestBody = { cardNumber: string };
+beforeAll(() => {
+  server.listen();
+});
 
-const handlers = [
-  http.post<{}, CreditCardsRequestBody>(
-    "http://localhost:3000/api/credit_cards",
-    async ({ request }) => {
-      const { cardNumber } = await request.json();
-      if (cardNumber !== "valid") {
-        return new HttpResponse(null, { status: 422 });
-      }
-      return new HttpResponse(null, { status: 201 });
-    },
-  ),
-];
+afterEach(() => {
+  server.resetHandlers();
+});
+
+afterAll(() => {
+  server.close();
+});
 
 const queryClient = new QueryClient({
   defaultOptions: {

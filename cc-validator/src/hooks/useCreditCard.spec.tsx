@@ -1,25 +1,22 @@
 import { describe, test, expect, beforeAll, afterEach, afterAll } from "vitest";
 import React from "react";
 import { renderHook, waitFor, act, cleanup } from "@testing-library/react";
-import { setupServer } from "msw/node";
+import { server } from "../mocks/node";
 import { http, HttpResponse } from "msw";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import useCreditCard from "./useCreditCard";
 
-type CreditCardsRequestBody = { cardNumber: string };
+beforeAll(() => {
+  server.listen();
+});
 
-const handlers = [
-  http.post<{}, CreditCardsRequestBody>(
-    "http://localhost:3000/api/credit_cards",
-    async ({ request }) => {
-      const { cardNumber } = await request.json();
-      if (cardNumber !== "valid") {
-        return new HttpResponse(null, { status: 422 });
-      }
-      return new HttpResponse(null, { status: 201 });
-    },
-  ),
-];
+afterEach(() => {
+  server.resetHandlers();
+});
+
+afterAll(() => {
+  server.close();
+});
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -108,11 +105,11 @@ describe("useCreditCard", () => {
   });
 
   test("should handle server error", async () => {
-    const handlers = [
+    server.use(
       http.post("http://localhost:3000/api/credit_cards", () => {
         return new HttpResponse(null, { status: 500 });
       }),
-    ];
+    );
 
     const { result } = renderHook(() => useCreditCard(), {
       wrapper,
